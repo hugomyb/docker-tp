@@ -27,7 +27,17 @@ Avoir installé les outils suivants :
    cd docker-tp
     ```
    
-2. Créer les secrets nécessaires pour PostgreSQL :
+2. Créer un fichier .env à la racine du projet pour définir les variables d'environnement nécessaires (uniquement avec Docker Compose) :
+
+   ```bash
+   POSTGRES_USER=user
+   POSTGRES_PASSWORD=password
+   POSTGRES_DB=mydatabase
+   POSTGRES_HOST=postgres
+   POSTGRES_PORT=5432
+   ```
+   
+2. Créer les secrets nécessaires pour PostgreSQL (uniquement avec Docker Swarm) :
     ```bash
     echo "password" | docker secret create pg_password -
     echo "user" | docker secret create pg_user -
@@ -92,7 +102,7 @@ docker stack deploy -c docker-swarm.yml app_stack
 
 ## Services Déployés
 
-- Flask : Backend accessible via le reverse proxy.
+- Flask : Backend accessible via le reverse proxy, sur http://localhost.
 - Nginx : Reverse proxy redirigeant les requêtes HTTP vers Flask.
 - PostgreSQL : Base de données persistante.
 - Portainer : Interface de gestion des conteneurs, accessible sur http://localhost:9000.
