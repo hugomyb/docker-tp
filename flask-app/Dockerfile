@@ -8,9 +8,13 @@ RUN pip install --no-cache-dir -r requirements.txt
 FROM python:3.11-alpine
 LABEL maintainer="Hugo Mayonobe <hugomayonobe@gmail.com>"
 WORKDIR /app
-RUN apk add --no-cache curl
+
+# Installation de psql et autres dépendances nécessaires pour la connexion à la base de données
+RUN apk add --no-cache curl postgresql-client
+
 COPY --from=builder /usr/local /usr/local
 COPY app.py .
 ENV FLASK_APP=app.py
 EXPOSE 5000
+
 CMD ["sh", "-c", "if [ \"$FLASK_ENV\" = development ]; then flask run --host=0.0.0.0; else gunicorn -b 0.0.0.0:5000 app:app; fi"]

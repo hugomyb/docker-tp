@@ -8,6 +8,15 @@ services:
     environment:
       - FLASK_ENV=development
       - FLASK_DEBUG=1
+      - POSTGRES_USER_FILE=/run/secrets/pg_user
+      - POSTGRES_PASSWORD_FILE=/run/secrets/pg_password
+      - POSTGRES_DB_FILE=/run/secrets/pg_db
+      - POSTGRES_HOST=postgres
+      - POSTGRES_PORT=5432
+    secrets:
+      - pg_password
+      - pg_user
+      - pg_db
     healthcheck:
       test: [ "CMD-SHELL", "curl --silent --fail http://localhost:5000 || exit 1" ]
       interval: 10s
