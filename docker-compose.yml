@@ -5,6 +5,9 @@ services:
     image: hugomayo7/flask-app:latest
     networks:
       - app-network
+    environment:
+      - FLASK_ENV=development
+      - FLASK_DEBUG=1
     healthcheck:
       test: [ "CMD-SHELL", "curl --silent --fail http://localhost:5000 || exit 1" ]
       interval: 10s
