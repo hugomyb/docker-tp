@@ -1,0 +1,103 @@
+version: '3.8'
+
+services:
+  flask:
+    image: hugomayo7/flask-app:latest
+    networks:
+      - app-network
+    environment:
+      - FLASK_ENV=development
+      - FLASK_DEBUG=1
+      - POSTGRES_USER_FILE=/run/secrets/pg_user
+      - POSTGRES_PASSWORD_FILE=/run/secrets/pg_password
+      - POSTGRES_DB_FILE=/run/secrets/pg_db
+      - POSTGRES_HOST=postgres
+      - POSTGRES_PORT=5432
+    secrets:
+      - pg_password
+      - pg_user
+      - pg_db
+    healthcheck:
+      test: [ "CMD-SHELL", "curl --silent --fail http://localhost:5000 || exit 1" ]
+      interval: 10s
+      retries: 3
+      start_period: 5s
+      timeout: 2s
+    deploy:
+      replicas: 3
+      resources:
+        limits:
+          cpus: "1.0"
+          memory: 512M
+      labels:
+        - "maintainer=Hugo Mayonobe & Gabriel Boig"
+        - "description=Flask service"
+        - "version=1.0.0"
+
+  nginx:
+    image: nginx:latest
+    volumes:
+      - ./nginx-swarm.conf:/etc/nginx/conf.d/default.conf
+    ports:
+      - "80:80"
+    networks:
+      - app-network
+    command: [ "sh", "-c", "sleep 10 && nginx -g 'daemon off;'" ]
+    deploy:
+      replicas: 1
+      labels:
+        - "maintainer=Hugo Mayonobe & Gabriel Boig"
+        - "description=Nginx reverse proxy for Flask"
+        - "version=1.0.0"
+
+  postgres:
+    image: postgres:15
+    secrets:
+      - pg_password
+      - pg_user
+      - pg_db
+    environment:
+      POSTGRES_PASSWORD_FILE: /run/secrets/pg_password
+      POSTGRES_USER_FILE: /run/secrets/pg_user
+      POSTGRES_DB_FILE: /run/secrets/pg_db
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    networks:
+      - app-network
+    deploy:
+      labels:
+        - "maintainer=Hugo Mayonobe & Gabriel Boig"
+        - "description=PostgreSQL database service"
+        - "version=15"
+
+  portainer:
+    image: portainer/portainer-ce:latest
+    command: -H unix:///var/run/docker.sock
+    ports:
+      - "9000:9000"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - portainer_data:/data
+    deploy:
+      replicas: 1
+      placement:
+        constraints: [ node.role == manager ]
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: overlay
+    attachable: true
+
+volumes:
+  postgres-data:
+  portainer_data:
+
+secrets:
+  pg_password:
+    external: true
+  pg_user:
+    external: true
+  pg_db:
+    external: true
