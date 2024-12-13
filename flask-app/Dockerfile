@@ -8,8 +8,8 @@ RUN pip install --no-cache-dir -r requirements.txt
 FROM python:3.11-alpine
 LABEL maintainer="Hugo Mayonobe <hugomayonobe@gmail.com>"
 WORKDIR /app
-COPY --from=builder /usr/local/lib/python3.11/site-packages /usr/local/lib/python3.11/site-packages
+COPY --from=builder /usr/local /usr/local
 COPY app.py .
 ENV FLASK_APP=app.py
 EXPOSE 5000
-CMD ["python", "-m", "flask", "run", "--host=0.0.0.0"]
+CMD ["gunicorn", "-b", "0.0.0.0:5000", "app:app"]
