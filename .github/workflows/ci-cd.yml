@@ -71,7 +71,7 @@ jobs:
 
       - name: Deploy stack in Docker Swarm
         run: |
-          docker stack deploy -c docker-compose.yml app_stack
+          docker stack deploy -c docker-swarm.yml app_stack
 
       - name: Verify deployment
         run: |
