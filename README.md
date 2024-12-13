@@ -13,10 +13,9 @@ Ce projet implémente une stack multi-services avec **Docker Compose** et **Dock
 ## Prérequis
 
 Avoir installé les outils suivants :
-- [Docker](https://www.docker.com/) version 20.10 ou supérieure
-- [Docker Compose](https://docs.docker.com/compose/) version 1.29 ou supérieure
-- Un environnement **Docker Swarm** initialisé (pour tester sur plusieurs nœuds).
-- Un accès à un cluster Docker Swarm, ou alors il est possible de tester localement avec un seul nœud en exécutant `docker swarm init`.
+- [Docker](https://www.docker.com/)
+- [Docker Compose](https://docs.docker.com/compose/)
+- Accès à un cluster **Docker Swarm** (optionnel, pour déploiement avec Swarm).
 
 ---
 
@@ -37,6 +36,20 @@ Avoir installé les outils suivants :
    
 ## Démarrage du projet
 
+### Avec Docker Compose
+
+1. Lancer les services avec Docker Compose :
+    ```bash
+    docker-compose up -d
+    ```
+   
+2. Vérifier que les services sont en fonctionnement :
+    ```bash
+    docker-compose ps
+    ```
+   
+### Avec Docker Swarm
+
 1. Initialiser Docker Swarm :
     ```bash
     docker swarm init
@@ -44,7 +57,7 @@ Avoir installé les outils suivants :
    
 2. Déployer la stack avec Docker Compose :
     ```bash
-    docker stack deploy -c docker-compose.yml app_stack
+    docker stack deploy -c docker-swarm.yml app_stack
     ```
    
 3. Vérifier que les services sont en fonctionnement :
@@ -55,15 +68,26 @@ Avoir installé les outils suivants :
 ## Structure du Projet
 
 - Dockerfile : Construction de l'image Flask avec Gunicorn.
-- docker-compose.yml : Définition des services pour la stack.
-- nginx.conf : Configuration de Nginx pour rediriger les requêtes vers Flask.
+- docker-compose.yml : Définition des services pour Docker Compose.
+- docker-swarm.yml : Définition des services pour Docker Swarm.
+- nginx.conf : Configuration de Nginx pour rediriger les requêtes vers Flask pour Docker Compose.
+- nginx-swarm.conf : Configuration de Nginx pour rediriger les requêtes vers Flask pour Docker Swarm.
 - flask-app/ : Application Flask.
 
 ## Exécution des Services Docker Swarm
 
-Pour redéployer ou mettre à jour la stack :
+### Docker Compose
+
+Pour redéployer ou mettre à jour la stack avec Docker Compose :
 ```bash
-docker stack deploy -c docker-compose.yml app_stack
+docker-compose up -d
+```
+
+### Docker Swarm
+
+Pour redéployer ou mettre à jour la stack avec Docker Swarm :
+```bash
+docker stack deploy -c docker-swarm.yml app_stack
 ```
 
 ## Services Déployés
@@ -90,15 +114,19 @@ docker service logs app_stack_flask
 
 ## CI/CD avec GitHub Actions
 
-Ce projet utilise GitHub Actions pour automatiser la construction de l'image Docker et le déploiement dans Docker Swarm. Voici les étapes :
+Ce projet est intégré avec une pipeline CI/CD sur GitHub Actions.
 
-1. Création de Secrets Docker : Les secrets PostgreSQL sont créés automatiquement dans Docker Swarm lors de l'exécution du pipeline CI/CD.
+- Docker Compose et Docker Swarm sont utilisés pour le déploiement.
+- La construction de l'image et le déploiement des services sont automatisés à chaque push sur la branche main.
 
-2. Fichier de workflow CI/CD : Le fichier .github/workflows/ci-cd.yml est configuré pour :
-   - Construire l'image Docker.
-   - Initialiser Docker Swarm (si nécessaire).
-   - Créer les secrets PostgreSQL dans Docker Swarm.
-   - Déployer la stack avec docker stack deploy.
+## Exécution des Tests CI/CD
+
+Lorsqu'un commit est poussé sur la branche main, les étapes suivantes sont exécutées automatiquement :
+
+1. Construction de l'image Flask.
+2. Lancement des services avec Docker Compose. 
+3. Déploiement avec Docker Swarm.  
+4. Vérification du bon fonctionnement des services
 
 ## Contributeurs
 
