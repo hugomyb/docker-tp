@@ -8,6 +8,7 @@ RUN pip install --no-cache-dir -r requirements.txt
 FROM python:3.11-alpine
 LABEL maintainer="Hugo Mayonobe <hugomayonobe@gmail.com>"
 WORKDIR /app
+RUN apk add --no-cache curl
 COPY --from=builder /usr/local /usr/local
 COPY app.py .
 ENV FLASK_APP=app.py
