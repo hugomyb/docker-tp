@@ -80,10 +80,6 @@ Accéder à l'interface Portainer pour visualiser et gérer les services :
 - URL : http://localhost:9000
 - Ajouter l'environnement local pour gérer Docker.
 
-Tests
-
-Vérifier l'état de santé des services :
-
 ## Tests
 
 1. **Healthcheck Flask :** Vérifier l'état de santé du service Flask avec la commande suivante :
