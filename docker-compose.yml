@@ -32,12 +32,31 @@ services:
 
   postgres:
     image: postgres:15
+    secrets:
+      - pg_password
+      - pg_user
+      - pg_db
     environment:
-      POSTGRES_USER: user
-      POSTGRES_PASSWORD: password
-      POSTGRES_DB: mydatabase
+      POSTGRES_PASSWORD_FILE: /run/secrets/pg_password
+      POSTGRES_USER_FILE: /run/secrets/pg_user
+      POSTGRES_DB_FILE: /run/secrets/pg_db
     volumes:
       - postgres-data:/var/lib/postgresql/data
+    networks:
+      - app-network
+
+  portainer:
+    image: portainer/portainer-ce:latest
+    command: -H unix:///var/run/docker.sock
+    ports:
+      - "9000:9000"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - portainer_data:/data
+    deploy:
+      replicas: 1
+      placement:
+        constraints: [ node.role == manager ]
     networks:
       - app-network
 
@@ -48,3 +67,12 @@ networks:
 
 volumes:
   postgres-data:
+  portainer_data:
+
+secrets:
+  pg_password:
+    external: true
+  pg_user:
+    external: true
+  pg_db:
+    external: true
