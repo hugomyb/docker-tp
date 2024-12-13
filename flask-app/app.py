@@ -29,21 +29,23 @@ def test_db_connection():
             port=DB_PORT,
         )
         connection.close()
-        print("Connexion à la base de données réussie.")
+        return "Connexion à la base de données réussie. 🎉"
     except Exception as e:
-        print(f"Erreur de connexion à la base de données : {e}")
-        exit(1)
+        return f"Erreur de connexion à la base de données : {e} 😞"
 
 
 @app.route("/")
 def hello():
-    return "Hello from Flask!"
+    db_status = test_db_connection()
+    return f"Hello from Flask! {db_status}"
 
 
 if __name__ == "__main__":
     print("Démarrage de l'application Flask...")
-    test_db_connection()
+    db_status = test_db_connection()
+    print(db_status)
     app.run(host="0.0.0.0", port=5000)
 else:
     print("Démarrage avec Gunicorn...")
-    test_db_connection()
+    db_status = test_db_connection()
+    print(db_status)
