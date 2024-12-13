@@ -13,9 +13,10 @@ Ce projet implémente une stack multi-services avec **Docker Compose** et **Dock
 ## Prérequis
 
 Avoir installé les outils suivants :
-- [Docker](https://www.docker.com/)
-- [Docker Compose](https://docs.docker.com/compose/)
-- Accès à un cluster **Docker Swarm**.
+- [Docker](https://www.docker.com/) version 20.10 ou supérieure
+- [Docker Compose](https://docs.docker.com/compose/) version 1.29 ou supérieure
+- Un environnement **Docker Swarm** initialisé (pour tester sur plusieurs nœuds).
+- Un accès à un cluster Docker Swarm, ou alors il est possible de tester localement avec un seul nœud en exécutant `docker swarm init`.
 
 ---
 
@@ -85,7 +86,7 @@ Vérifier l'état de santé des services :
 
 ## Tests
 
-1. Healthcheck Flask :
+1. **Healthcheck Flask :** Vérifier l'état de santé du service Flask avec la commande suivante :
 ```bash
 docker service logs app_stack_flask
 ```
