@@ -63,6 +63,16 @@ jobs:
         run: |
           docker swarm init || true
 
-      - name: Deploy Stack to Docker Swarm
+      - name: Create secrets for PostgreSQL
+        run: |
+          echo ${{ secrets.POSTGRES_PASSWORD }} | docker secret create pg_password -
+          echo ${{ secrets.POSTGRES_USER }} | docker secret create pg_user -
+          echo ${{ secrets.POSTGRES_DB }} | docker secret create pg_db -
+
+      - name: Deploy stack in Docker Swarm
         run: |
           docker stack deploy -c docker-compose.yml app_stack
+
+      - name: Verify deployment
+        run: |
+          docker service ls
