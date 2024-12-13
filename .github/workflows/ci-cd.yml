@@ -59,6 +59,10 @@ jobs:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
 
-      - name: Deploy to Docker Swarm
+      - name: Initialize Docker Swarm
+        run: |
+          docker swarm init || true
+
+      - name: Deploy Stack to Docker Swarm
         run: |
           docker stack deploy -c docker-compose.yml app_stack
