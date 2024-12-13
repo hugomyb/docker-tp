@@ -88,6 +88,18 @@ docker service logs app_stack_flask
 ```
 2. Vérifier Nginx en accédant à http://localhost.
 
+## CI/CD avec GitHub Actions
+
+Ce projet utilise GitHub Actions pour automatiser la construction de l'image Docker et le déploiement dans Docker Swarm. Voici les étapes :
+
+1. Création de Secrets Docker : Les secrets PostgreSQL sont créés automatiquement dans Docker Swarm lors de l'exécution du pipeline CI/CD.
+
+2. Fichier de workflow CI/CD : Le fichier .github/workflows/ci-cd.yml est configuré pour :
+   - Construire l'image Docker.
+   - Initialiser Docker Swarm (si nécessaire).
+   - Créer les secrets PostgreSQL dans Docker Swarm.
+   - Déployer la stack avec docker stack deploy.
+
 ## Contributeurs
 
 - Hugo Mayonobe
