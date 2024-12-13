@@ -38,7 +38,7 @@ jobs:
 
       - name: Build the Docker image
         run: |
-          docker build -t hugomayo7/flask-app:latest .
+          docker build -t hugomayo7/flask-app:latest ./flask-app
 
   # Job de déploiement sur Docker Swarm
   deploy:
