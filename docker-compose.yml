@@ -20,6 +20,10 @@ services:
         limits:
           cpus: "1.0"
           memory: 512M
+      labels:
+        - "maintainer=Hugo Mayonobe & Gabriel Boig"
+        - "description=Flask service"
+        - "version=1.0.0"
 
   nginx:
     image: nginx:latest
@@ -32,6 +36,10 @@ services:
     command: [ "sh", "-c", "sleep 10 && nginx -g 'daemon off;'" ]
     deploy:
       replicas: 1
+      labels:
+        - "maintainer=Hugo Mayonobe & Gabriel Boig"
+        - "description=Nginx reverse proxy for Flask"
+        - "version=1.0.0"
 
   postgres:
     image: postgres:15
@@ -47,6 +55,11 @@ services:
       - postgres-data:/var/lib/postgresql/data
     networks:
       - app-network
+    deploy:
+      labels:
+        - "maintainer=Hugo Mayonobe & Gabriel Boig"
+        - "description=PostgreSQL database service"
+        - "version=15"
 
   portainer:
     image: portainer/portainer-ce:latest
