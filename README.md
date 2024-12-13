@@ -12,7 +12,7 @@ Ce projet implémente une stack multi-services avec **Docker Compose** et **Dock
 
 ## Prérequis
 
-Assure-toi d'avoir installé les outils suivants :
+Avoir installé les outils suivants :
 - [Docker](https://www.docker.com/)
 - [Docker Compose](https://docs.docker.com/compose/)
 - Accès à un cluster **Docker Swarm**.
@@ -21,13 +21,13 @@ Assure-toi d'avoir installé les outils suivants :
 
 ## Instructions d'Installation
 
-1. Clone le projet :
+1. Cloner le projet :
    ```bash
    git clone https://github.com/hugomyb/docker-tp.git
    cd docker-tp
     ```
    
-2. Crée les secrets nécessaires pour PostgreSQL :
+2. Créer les secrets nécessaires pour PostgreSQL :
     ```bash
     echo "password" | docker secret create pg_password -
     echo "user" | docker secret create pg_user -
@@ -36,17 +36,17 @@ Assure-toi d'avoir installé les outils suivants :
    
 ## Démarrage du projet
 
-1. Initialise Docker Swarm :
+1. Initialiser Docker Swarm :
     ```bash
     docker swarm init
     ```
    
-2. Déploie la stack avec Docker Compose :
+2. Déployer la stack avec Docker Compose :
     ```bash
     docker stack deploy -c docker-compose.yml app_stack
     ```
    
-3. Vérifie que les services sont en fonctionnement :
+3. Vérifier que les services sont en fonctionnement :
     ```bash
     docker service ls
     ```
@@ -74,14 +74,14 @@ docker stack deploy -c docker-compose.yml app_stack
 
 ## Accès à Portainer
 
-Accède à l'interface Portainer pour visualiser et gérer les services :
+Accéder à l'interface Portainer pour visualiser et gérer les services :
 
 - URL : http://localhost:9000
-- Ajoute l'environnement local pour gérer Docker.
+- Ajouter l'environnement local pour gérer Docker.
 
 Tests
 
-Vérifie l'état de santé des services :
+Vérifier l'état de santé des services :
 
 ## Tests
 
